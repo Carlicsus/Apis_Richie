@@ -1,26 +1,33 @@
-from typing import List, Union, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
-from models.solicitudes import MyEstatus, MyPrioridad
+from typing import Optional
 
 class SolicitudBase(BaseModel):
     Paciente_ID: int
     Medico_ID: int
     Servicio_ID: int
-    Prioridad: MyPrioridad
+    Prioridad: str
     Descripcion: str
-    Estatus: MyEstatus
-    Estatus_Aprobacion: bool
-    Fecha_Registro: datetime
-    Fecha_Actualizacion: datetime
+    Estatus: Optional[str] = "Registrada"
+    Estatus_Aprobacion: Optional[bool] = False
 
 class SolicitudCreate(SolicitudBase):
     pass
 
-class SolicitudUpdate(SolicitudBase):
-    pass
+class SolicitudUpdate(BaseModel):
+    Prioridad: Optional[str]
+    Descripcion: Optional[str]
+    Estatus: Optional[str]
+    Estatus_Aprobacion: Optional[bool]
+    Fecha_Actualizacion: Optional[datetime] = Field(default_factory=datetime.utcnow)
 
-class Solicitud(SolicitudBase):
+class SolicitudInDBBase(SolicitudBase):
     ID: int
+    Fecha_Registro: datetime
+    Fecha_Actualizacion: Optional[datetime]
+    
     class Config:
         from_attributes = True
+
+class Solicitud(SolicitudInDBBase):
+    pass

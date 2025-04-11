@@ -1,22 +1,19 @@
-from typing import Optional
-from pydantic import BaseModel
 from datetime import datetime
-import enum
+from typing import Optional
 
-from models.medicamentos import ViaAdministracion, Presentacion, Tipo
+from pydantic import BaseModel
 
 
 class MedicamentoBase(BaseModel):
-    Nombre_comercial: str
-    Nombre_generico: str
-    Via_administracion: ViaAdministracion
-    Presentacion: Presentacion
-    Tipo: Tipo
-    Cantidad: float
-    Volumen: Optional[float] = None
-    Estatus: bool
+    Nombre_Comercial: str
+    Nombre_Generico: str
+    Via_Administracion: str
+    Presentacion: str
+    Tipo: str
+    Cantidad: int
+    Volumen: float
     Fecha_registro: datetime
-    Fecha_actualizacion: datetime
+    Fecha_actualizacion: Optional[datetime] = None
 
 class MedicamentoCreate(MedicamentoBase):
     pass
@@ -28,4 +25,4 @@ class Medicamento(MedicamentoBase):
     ID: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
