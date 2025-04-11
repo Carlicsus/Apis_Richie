@@ -1,41 +1,34 @@
-import models.dispensaciones
-import schemas.dispensaciones
 from sqlalchemy.orm import Session
 
-def get_dispensacion(db: Session, ID: int):
-    return db.query(models.dispensaciones.Dispensacion).filter(models.dispensaciones.Dispensacion.ID == ID).first()
+from models.dispensaciones import Dispensacion
+from schemas.dispensaciones import DispensacionCreate, DispensacionUpdate
+
+
+def get_dispensacion(db: Session, dispensacion_id: int):
+    return db.query(Dispensacion).filter(Dispensacion.ID == dispensacion_id).first()
 
 def get_dispensaciones(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(models.dispensaciones.Dispensacion).offset(skip).limit(limit).all()
+    return db.query(Dispensacion).offset(skip).limit(limit).all()
 
-def create_dispensacion(db: Session, dispensacion: schemas.dispensaciones.DispensacionCreate):
-    db_dispensacion = models.dispensaciones.Dispensacion(
-        RecetaMedica_id=dispensacion.RecetaMedica_id,
-        PersonalMedico_id=dispensacion.PersonalMedico_id,
-        Solicitud_id=dispensacion.Solicitud_id,
-        Estatus=dispensacion.Estatus,
-        Tipo=dispensacion.Tipo,
-        TotalMedicamentosEntregados=dispensacion.TotalMedicamentosEntregados,
-        Total_costo=dispensacion.Total_costo,
-        Fecha_registro=dispensacion.Fecha_registro,
-        Fecha_actualizacion=dispensacion.Fecha_actualizacion
-    )
+def create_dispensacion(db: Session, dispensacion: DispensacionCreate):
+    db_dispensacion = Dispensacion(**dispensacion.dict())
     db.add(db_dispensacion)
     db.commit()
     db.refresh(db_dispensacion)
     return db_dispensacion
 
-def update_dispensacion(db: Session, ID: int, dispensacion: schemas.dispensaciones.DispensacionUpdate):
-    db_dispensacion = db.query(models.dispensaciones.Dispensacion).filter(models.dispensaciones.Dispensacion.ID == ID).first()
+def update_dispensacion(db: Session, dispensacion_id: int, dispensacion: DispensacionUpdate):
+    db_dispensacion = db.query(Dispensacion).filter(Dispensacion.ID == dispensacion_id).first()
     if db_dispensacion:
         for var, value in vars(dispensacion).items():
-            setattr(db_dispensacion, var, value) if value is not None else None
+            if value is not None:
+                setattr(db_dispensacion, var, value)
         db.commit()
         db.refresh(db_dispensacion)
     return db_dispensacion
 
-def delete_dispensacion(db: Session, ID: int):
-    db_dispensacion = db.query(models.dispensaciones.Dispensacion).filter(models.dispensaciones.Dispensacion.ID == ID).first()
+def delete_dispensacion(db: Session, dispensacion_id: int):
+    db_dispensacion = db.query(Dispensacion).filter(Dispensacion.ID == dispensacion_id).first()
     if db_dispensacion:
         db.delete(db_dispensacion)
         db.commit()

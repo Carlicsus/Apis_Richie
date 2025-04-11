@@ -1,35 +1,33 @@
-from typing import List, Optional, Union
 from pydantic import BaseModel
+from typing import Optional
 from datetime import datetime
 
-from models.lotes import EstatusLote
-
-class LoteBase(BaseModel):
+class LoteMedicamentoBase(BaseModel):
     Medicamento_ID: int
-    Personal_Medico_ID: int
+    PersonalMedico_ID: int
     Clave: str
-    Estatus: EstatusLote
+    Estatus: str
     Costo_Total: float
     Cantidad: int
     Ubicacion: str
-    Fecha_Registro: datetime
-    Fecha_Actualizacion: datetime
 
-class LoteCreate(LoteBase):
+class LoteMedicamentoCreate(LoteMedicamentoBase):
     pass
 
-class LoteUpdate(BaseModel):
-    Medicamento_ID: Optional[int] = None
-    Personal_Medico_ID: Optional[int] = None
-    Clave: Optional[str] = None
-    Estatus: Optional[EstatusLote] = None
+class LoteMedicamentoUpdate(BaseModel):
+    Estatus: Optional[str] = None
     Costo_Total: Optional[float] = None
     Cantidad: Optional[int] = None
     Ubicacion: Optional[str] = None
-    Fecha_Registro: Optional[datetime] = None
-    Fecha_Actualizacion: Optional[datetime] = None
+    Fecha_actualizacion: Optional[datetime] = None
 
-class Lote(LoteBase):
+class LoteMedicamentoInDBBase(LoteMedicamentoBase):
     ID: int
+    Fecha_registro: datetime
+    Fecha_actualizacion: Optional[datetime] = None
+
     class Config:
-        orm_mode = True
+        orm_mode = True  # Asegura que los modelos se puedan convertir correctamente desde SQLAlchemy
+
+class LoteMedicamento(LoteMedicamentoInDBBase):
+    pass

@@ -63,18 +63,19 @@ from routes.rol import rol
 from routes.userrol import userrol
 
 # 🔹 IMPORTAR RUTAS DOCUMENTADAS (NO USADAS POR AHORA)
-# from routes.receta import receta
-# from routes.citas import cita
+from routes.receta import receta_router as receta # ✅
+#from routes.citas import cita
 # from routes.expediente import expediente
 # from routes.cirugia import cirugia_router
 # from routes.horarios import horarios
 # from routes.bitacora import bitacora
 from routes.departamentos import departamentos
-# from routes.dispensaciones import dispensacion
+from routes.dispensaciones import dispensacion_router as dispensacion
 # from routes.estudios import estudios
 # from routes.resultados_estudios import resultados_estudios
-# from routes.lotes import lote
-# from routes.medicamentos import medicamento
+from routes.lotes import lotes_medicamentos_router as lote
+from routes.medicamentos import medicamento_router as medicamento
+from routes.solicitudes import solicitudes_router as solicitud
 # from routes.personal_medico import personal_medico
 # from routes.puestos import puesto
 # from routes.puestos_departamentos import puesto_departamento
@@ -94,6 +95,12 @@ app.include_router(area_medica)
 app.include_router(rol)
 app.include_router(userrol)
 app.include_router(departamentos)
+app.include_router(receta)
+app.include_router(dispensacion)
+app.include_router(medicamento)
+app.include_router(lote)
+app.include_router(solicitud)
+
 
 
 # 🔹 CREAR LAS TABLAS **DESPUÉS DE REGISTRAR LAS RUTAS**
